@@ -43,25 +43,15 @@ def handle_connection(conn, addr):
 
 # Start single-threaded proxy server
 def start_server():
-    '''
-    Create the socket in 'with' block to ensure it gets auto-closed once 
-    we're done.
-    '''
+    
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         # Bind the server to a specific host and port on this machine
         server_socket.bind((PROXY_SERVER_HOST,PROXY_SERVER_PORT))
-        '''
-        Allow us to reuse this socket address during linger, as well as other
-        implications. 
-
-        See: https://stackoverflow.com/questions/14388706/how-do-so-reuseaddr-and-so-reuseport-differ
-        '''
+       
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.listen(2) #Allow queuing of up to 2 connections
-        '''
-        Wait for an incomming connection, and when one arrives, accept it and 
-        create a new socket called 'conn' to interact with it.
-        '''
+      a new socket called 'conn' to interact with it.
+        
         conn, addr = server_socket.accept()
 
         # Pass 'conn' off to handle_connection to do some logic
@@ -81,18 +71,6 @@ def start_threaded_server():
 
 
 
-#start_server()
 start_threaded_server()
 
-'''
-See which ports are active: 
-lsof -nP | grep LISTEN
 
-Kill processes, in increasing order of danger:
-pkill python
-
-sudo kill <pid>
-
-sudo kill -9 <pid>
-
-'''
